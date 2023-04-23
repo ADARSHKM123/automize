@@ -6,7 +6,7 @@ const puppeteer = require('puppeteer');
 router.get('/', async function(req, res, next) {
 
   try {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch( { headless: false });
     const page = await browser.newPage();
 
     // Login to LinkedIn
