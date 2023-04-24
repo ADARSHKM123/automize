@@ -15,12 +15,12 @@ router.get('/', async function(req, res, next) {
     await page.type('#password', process.env.PASSWORD);
     await page.click('button[type="submit"]');
     await page.waitForNavigation();
-
+   
     // Go to job search page
     await page.goto('https://www.linkedin.com/jobs/search/?currentJobId=3577101544&f_LF=f_AL&keywords=React%20Developer%20Bangalore');
 
     // Get all job cards on the page
-    const jobCards = await page.$$('.jobs-search__results-list li');
+    const jobCards = await page.$$( process.env.JOBLIST_SELECTOR);
 
     console.log('jobCards');
     console.log(jobCards);
