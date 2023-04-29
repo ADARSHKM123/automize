@@ -15,12 +15,21 @@ router.get('/', async function(req, res, next) {
     await page.type('#password', process.env.PASSWORD);
     await page.click('button[type="submit"]');
     await page.waitForNavigation();
+<<<<<<< HEAD
 
 // Go to job search page 
 await page.goto('https://www.linkedin.com/jobs/search/?currentJobId=3577101544&f_LF=f_AL&keywords=React%20Developer%20Bangalore');
 
 // Wait for job cards to load 
 await page.waitForSelector(process.env.JOBLIST_SELECTOR, { timeout: 60000 });
+=======
+   
+    // Go to job search page
+    await page.goto('https://www.linkedin.com/jobs/search/?currentJobId=3577101544&f_LF=f_AL&keywords=React%20Developer%20Bangalore');
+
+    // Get all job cards on the page
+    const jobCards = await page.$$( process.env.JOBLIST_SELECTOR);
+>>>>>>> cba9cce3d5f41df6722b5da1e0185e7b8ee49018
 
 // Get all job cards on the page
 const jobCards = await page.$$(process.env.JOBLIST_SELECTOR);
