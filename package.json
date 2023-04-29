@@ -15,5 +15,17 @@
     "morgan": "~1.9.1",
     "nodemon": "^2.0.22",
     "puppeteer": "^19.10.1"
-  }
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ADARSHKM123/automize.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ADARSHKM123/automize/issues"
+  },
+  "homepage": "https://github.com/ADARSHKM123/automize#readme",
+  "description": ""
 }

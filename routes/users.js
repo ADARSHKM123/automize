@@ -15,49 +15,44 @@ router.get('/', async function(req, res, next) {
     await page.type('#password', process.env.PASSWORD);
     await page.click('button[type="submit"]');
     await page.waitForNavigation();
-<<<<<<< HEAD
 
-// Go to job search page 
-await page.goto('https://www.linkedin.com/jobs/search/?currentJobId=3577101544&f_LF=f_AL&keywords=React%20Developer%20Bangalore');
-
-// Wait for job cards to load 
-await page.waitForSelector(process.env.JOBLIST_SELECTOR, { timeout: 60000 });
-=======
+    console.log('Logged in successfully');
    
-    // Go to job search page
-    await page.goto('https://www.linkedin.com/jobs/search/?currentJobId=3577101544&f_LF=f_AL&keywords=React%20Developer%20Bangalore');
+    // Go to job search page 
+    await page.goto('https://www.linkedin.com/jobs/search/?currentJobId=3237761134&keywords=react%20developer%20bangalore');
 
-    // Get all job cards on the page
-    const jobCards = await page.$$( process.env.JOBLIST_SELECTOR);
->>>>>>> cba9cce3d5f41df6722b5da1e0185e7b8ee49018
+    // Wait for job cards to load 
+    await page.waitForSelector(process.env.JOBLIST_SELECTOR, { timeout: 60000 });
 
-// Get all job cards on the page
-const jobCards = await page.$$(process.env.JOBLIST_SELECTOR);
+    // Get the first 10 job cards on the page
+    // const jobCards = await page.$$(
+    //   `${process.env.JOBLIST_SELECTOR}:nth-child(-n+10)`
+    // );
 
- 
-    console.log('jobCards');
+    const  jobCards = await page.$$('div[data-job-id]');
+    console.log('Job cards:');
     console.log(jobCards);
+
     const jobs = [];
     for (let i = 0; i < jobCards.length; i++) {
       const jobCard = jobCards[i];
     
       // Retrieve job details from job card
-      const jobTitle = await jobCard.$eval('.job-card-container_link job-card-list_title', element => element.innerText);
+      const jobTitle = await jobCard.$eval('.job-card-list__title', element => element.innerText);
       // const company = await jobCard.$eval('.job-card-container__company-name', element => element.innerText);
       // const location = await jobCard.$eval('.job-card-container__metadata-item', element => element.innerText);
 
       // Add job details to list of jobs
       jobs.push({
-        jobTitle: jobTitle,
+        jobTitle: jobTitle
         // company: company,
         // location: location
-      });
+      }); 
     }
 
     // Close browser    
     await browser.close(); 
     res.send(jobs);
-    // res.send('Job applications submitted successfully!',jobCards);
   } catch (err) {
     console.error(err);
     res.status(500).send('An error occurred while submitting job applications. Please try again later.');
