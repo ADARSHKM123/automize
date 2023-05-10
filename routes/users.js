@@ -20,12 +20,32 @@ router.get('/', async function(req, res, next) {
 
     await page.goto('https://www.linkedin.com/jobs/search/?currentJobId=3237761134&keywords=react%20developer%20bangalore');
 
-    await page.waitForSelector(process.env.JOBLIST_SELECTOR, { timeout: 60000 });
+    const evaluatings = async (page) => {
+      try {
+        while(true){
+          prevHeight = await page.evaluate('document.querySelector(".jobs-search-results-list").scrollHeight');
+          await page.evaluate('document.querySelector(".jobs-search-results-list").scrollBy(0,document.querySelector(".scaffold-layout__list").scrollHeight)');
+          await page.waitForFunction(`document.querySelector(".jobs-search-results-list").scrollHeight > ${prevHeight}`);
+          await new Promise((resolve)=> setTimeout(resolve,1000));    
+        }
+      } catch (err) {
+        console.error('An error occurred in page.evaluate():', err);
+      }
+    };
+    
+
+    await evaluatings(page);
+    
+
+    await page.waitForTimeout(2000);
+    // Wait for a few seconds to load more content
+    // await page.waitForTimeout(3000);
+    await page.waitForSelector(process.env.JOBLIST_SELECTOR, { timeout: 120000 });
 
     // Get the job cards on the page
-    const jobCards = await page.$$('div.job-card-container');
+    const jobCards = await page.$$('div.job-card-container');  
 
-    console.log(`Found ${jobCards.length} jobs`);
+    console.log(`Found ${jobCards.length} jobs`);  
 
     if (jobCards.length === 0) {
       throw new Error('No job cards found on the page');
@@ -46,9 +66,9 @@ router.get('/', async function(req, res, next) {
         await page.waitForNavigation();
 
         // Apply to the job
-        const applyButton = await page.$('button.jobs-apply-button');
-        if (applyButton) {
-          await applyButton.click();
+        const jobApplyButton = await page.$('button.jobs-apply-button');
+        if (jobApplyButton) {
+          await jobApplyButton.click();
           console.log(`Applied to job: ${jobTitle}`);
         } else {
           console.log(`Unable to apply to job: ${jobTitle}`);
@@ -56,7 +76,7 @@ router.get('/', async function(req, res, next) {
 
         // Go back to the job search results
         await page.goBack();
-        await page.waitForSelector(process.env.JOBLIST_SELECTOR, { timeout: 60000 });
+        await page.waitForSelector(process.env.JOBLIST_SELECTOR, { timeout: 120000 });
       }
 
       // Add job details to list of jobs
