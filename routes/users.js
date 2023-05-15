@@ -18,7 +18,7 @@ router.get('/', async function(req, res, next) {
 
     console.log('Logged in successfully');
 
-    await page.goto('https://www.linkedin.com/jobs/search/?currentJobId=3237761134&keywords=react%20developer%20bangalore');
+    await page.goto('https://www.linkedin.com/jobs/search/?currentJobId=3237761134&f_AL=true&keywords=react%20developer%20bangalore');
 
     const evaluatings = async (page) => {
       try {
